@@ -10,7 +10,9 @@ Se refactorizó completamente el proyecto Flutter de **Clean Architecture con da
 
 ## API REST conectada
 
-- **Base URL:** `https://adopplant-api.onrender.com`
+- **Base URL:** `https://adopplant-api.onrender.com` (staging). Se puede cambiar al
+  compilar sin tocar el código: `flutter run --dart-define=API_BASE_URL=<url>`
+  (ver `lib/core/config/api_config.dart`).
 
 ### Endpoints implementados
 

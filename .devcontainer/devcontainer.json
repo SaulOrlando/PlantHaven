@@ -1,0 +1,46 @@
+{
+  "name": "PlantHaven (Flutter 3.47 / Dart 3.13)",
+  "dockerComposeFile": "docker-compose.yml",
+  "service": "app",
+  "workspaceFolder": "/workspaces/planthaven",
+  "shutdownAction": "stopCompose",
+  "postCreateCommand": "flutter pub get",
+  "remoteUser": "vscode",
+  "remoteEnv": {
+    "PUB_CACHE": "/opt/pub-cache",
+    "GRADLE_USER_HOME": "/opt/gradle-cache",
+    "CHROME_EXECUTABLE": "/usr/local/bin/chrome"
+  },
+  "forwardPorts": [8080, 9222],
+  "portsAttributes": {
+    "8080": {
+      "label": "PlantHaven web (flutter run -d web-server --web-port 8080)",
+      "onAutoForward": "notify"
+    },
+    "9222": {
+      "label": "Chrome DevTools (depuración web)",
+      "onAutoForward": "silent"
+    }
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "Dart-Code.dart-code",
+        "Dart-Code.flutter",
+        "ms-azuretools.vscode-docker"
+      ],
+      "settings": {
+        "dart.flutterSdkPath": "/opt/flutter",
+        "dart.lineLength": 80,
+        "dart.previewFlutterUiGuides": true,
+        "editor.formatOnSave": true,
+        "editor.rulers": [80],
+        "files.exclude": {
+          "**/.dart_tool": true,
+          "**/build": true
+        }
+      }
+    }
+  },
+  "postAttachCommand": "echo 'SDK:      flutter --version' && echo 'Analizar:  flutter analyze' && echo 'Pruebas:  flutter test' && echo \"Web:      planthaven-web   (API: $API_BASE_URL)\" && echo 'Android:  flutter build apk --release'"
+}

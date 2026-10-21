@@ -1,0 +1,39 @@
+# Archivos que NO deben entrar en el contexto de build de Docker.
+# Cuanto más pequeño es el contexto, más rápida y reproducible es la imagen.
+
+# Control de versiones y metadatos
+.git
+.gitignore
+.github
+
+# Artefactos de Flutter/Dart
+.dart_tool
+.flutter-plugins
+.flutter-plugins-dependencies
+.pub-cache
+.pub
+build
+**/build
+coverage
+
+# Configuración local de Android (apunta a rutas de esta máquina)
+android/.gradle
+android/local.properties
+android/app/debug
+android/app/profile
+android/app/release
+
+# Artefactos de escritorio y móvil generados
+linux/flutter/ephemeral
+macos/Flutter/ephemeral
+windows/flutter/ephemeral
+ios/Pods
+ios/.symlinks
+ios/Flutter/Flutter.podspec
+
+# Documentación y herramientas de desarrollo (no hacen falta para compilar)
+docs
+*.md
+.devcontainer
+.idea
+.vscode

@@ -1,0 +1,56 @@
+# "name" fija el nombre del proyecto de Docker Compose. Sin esto, Compose
+# usaria el nombre de la carpeta (.devcontainer) y los devcontainers de este
+# workspace (este, el de Adoplant y el de AdopPlant.Analytics) chocarian con
+# el mismo id.
+name: planthaven-dev
+
+services:
+  # Entorno de desarrollo de PlantHaven (Flutter 3.47.4 + Dart 3.13.3).
+  #
+  # Se reutiliza la MISMA imagen que produce el Dockerfile (etapa `sdk`), de
+  # forma que dentro del contenedor hay exactamente el mismo Flutter, JDK y
+  # SDK de Android que usa CI. No hace falta una imagen oficial de Dev
+  # Containers porque no existe una de Flutter: la de la comunidad
+  # `ghcr.io/cirruslabs/flutter` llega a Flutter 3.44.0 / Dart 3.12.0 y el
+  # proyecto exige Dart >= 3.13.3 (`flutter pub get` fallaría).
+  app:
+    build:
+      context: ..
+      dockerfile: Dockerfile
+      target: sdk
+    image: planthaven-flutter:local
+    working_dir: /workspaces/planthaven
+    volumes:
+      - ..:/workspaces/planthaven:cached
+      # Cachés fuera del proyecto: sobreviven a las reconstrucciones de la
+      # imagen y a los `git clean`.
+      - planthaven-pub-cache:/opt/pub-cache
+      - planthaven-gradle-cache:/opt/gradle-cache
+    # El volumen de Gradle tapa el gradle.properties que trae la imagen, así
+    # que se escribe al arrancar. Limita el heap del daemon de Gradle: el del
+    # proyecto pide -Xmx8G y con equipos de 8 GB de RAM tumba el daemon de
+    # Docker a mitad del build.
+    command:
+      - bash
+      - -c
+      - |
+        printf 'org.gradle.jvmargs=-Xmx2g -XX:MaxMetaspaceSize=1g -XX:ReservedCodeCacheSize=256m\n' > /opt/gradle-cache/gradle.properties
+        chown vscode:vscode /opt/gradle-cache/gradle.properties || true
+        exec sleep infinity
+    environment:
+      PUB_CACHE: /opt/pub-cache
+      GRADLE_USER_HOME: /opt/gradle-cache
+      CHROME_EXECUTABLE: /usr/local/bin/chrome
+      # URL de la API que usa la app. Se inyecta con --dart-define, así que
+      # se puede cambiar sin tocar el código:
+      #   API_BASE_URL=http://host.docker.internal:8000   -> API local
+      #   API_BASE_URL=https://adopplant-api.onrender.com  -> staging (por defecto)
+      API_BASE_URL: "${API_BASE_URL:-https://adopplant-api.onrender.com}"
+      # La app móvil no usa el proxy de la empresa; se deja por si hace falta.
+      NO_PROXY: "localhost,127.0.0.1,host.docker.internal"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+volumes:
+  planthaven-pub-cache:
+  planthaven-gradle-cache:
