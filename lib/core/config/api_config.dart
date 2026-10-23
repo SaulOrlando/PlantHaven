@@ -8,8 +8,7 @@ class ApiConfig {
   /// `--dart-define=API_BASE_URL=<url>`:
   ///
   /// ```powershell
-  /// # API local de AdopPlant (desde el contenedor o el emulador)
-  /// flutter run --dart-define=API_BASE_URL=http://host.docker.internal:8000
+  /// # API local de AdopPlant desde el emulador o el navegador
   /// flutter run --dart-define=API_BASE_URL=http://10.0.2.2:8000
   /// ```
   ///
@@ -17,7 +16,6 @@ class ApiConfig {
   ///   - `https://adopplant-api.onrender.com` -> staging (valor por defecto)
   ///   - `http://localhost:8000`               -> API local desde el navegador
   ///   - `http://10.0.2.2:8000`                -> API local desde el emulador
-  ///   - `http://host.docker.internal:8000`    -> API local desde un contenedor
   static const String baseUrl = String.fromEnvironment(
     'API_BASE_URL',
     defaultValue: 'https://adopplant-api.onrender.com',
