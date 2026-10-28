@@ -26,21 +26,83 @@ lib/
 └── views/                     # Pantallas y widgets reutilizables
 ```
 
-## Ejecutar
+## Requisitos
 
-La app se ejecuta con **Flutter 3.47.4 / Dart 3.13.3** instalado en el equipo
-(el proyecto exige Dart >= 3.13.3; versiones anteriores como Flutter 3.44 no
-sirven).
+- [Flutter 3.47.4 / Dart 3.13.3](https://docs.flutter.dev/get-started/install)
+
+## Ejecutar la app
 
 ```powershell
-cd "C:\Users\sault\Documents\para mientras\PlantHaven"
+cd PlantHaven
 
 flutter pub get
 flutter analyze                 # análisis estático (0 problemas esperados)
-flutter test                    # 22 pruebas en verde
 flutter run                     # emulador o teléfono conectado
 flutter run -d chrome           # app web para la demostración
 ```
+
+## Ejecutar tests
+
+```powershell
+# Desde la carpeta PlantHaven/
+
+# Ejecutar todas las pruebas
+flutter test
+
+# Ejecutar con reporte detallado
+flutter test --reporter expanded
+
+# Ejecutar un archivo de test específico
+flutter test test/catalog_test.dart
+
+# Ejecutar con cobertura
+flutter test --coverage
+```
+
+**Total de pruebas:** 22 pruebas unitarias/widget en `test/`.
+
+## Test E2E móvil (Jira SCRUM-93)
+
+El ticket **SCRUM-93 — Test Extremo a Extremo 03** cubre pruebas funcionales E2E para la app móvil PlantHaven, conectadas contra la API de Adoplant.
+
+```powershell
+# Desde la carpeta PlantHaven/
+# Asegúrate de que la API de Adoplant esté levantada (http://127.0.0.1:8000)
+
+# Ejecutar todas las pruebas (incluye las de SCRUM-93)
+flutter test
+
+# Ejecutar con reporte detallado
+flutter test --reporter expanded
+
+# Ejecutar un archivo específico
+flutter test test/catalog_test.dart
+
+# Con cobertura
+flutter test --coverage
+```
+
+La URL de la API se inyecta con `--dart-define`:
+
+```powershell
+# API local desde la app web
+flutter run -d chrome --dart-define=API_BASE_URL=http://127.0.0.1:8000
+
+# API local desde el emulador Android
+flutter run --dart-define=API_BASE_URL=http://10.0.2.2:8000
+```
+
+## Ver reportes
+
+```powershell
+# Reporte detallado en consola
+flutter test --reporter expanded
+
+# Cobertura de código
+flutter test --coverage
+```
+
+El reporte de cobertura se genera en `coverage/lcov.info` y `coverage/index.html` (HTML). Abre `coverage/index.html` en el navegador para ver el detalle por archivo.
 
 La URL base de la API se inyecta sin tocar el código con `--dart-define`:
 
