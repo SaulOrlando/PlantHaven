@@ -32,9 +32,9 @@ lib/
 
 ## Ejecutar la app
 
-```powershell
-cd PlantHaven
+Situarse en la **raíz del repositorio** (la carpeta `PlantHaven/` recién clonada) y ejecutar:
 
+```powershell
 flutter pub get
 flutter analyze                 # análisis estático (0 problemas esperados)
 flutter run                     # emulador o teléfono conectado
@@ -44,7 +44,7 @@ flutter run -d chrome           # app web para la demostración
 ## Ejecutar tests
 
 ```powershell
-# Desde la carpeta PlantHaven/
+# Desde la raíz del repositorio (la carpeta PlantHaven/)
 
 # Ejecutar todas las pruebas
 flutter test
